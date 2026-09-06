@@ -1,0 +1,36 @@
+{
+  "url": "http://127.0.0.1:8080/",
+  "viewports": {
+    "desktop": {
+      "width": 1280,
+      "height": 800,
+      "status": 200,
+      "title": "C-1 Capacitor Prototype",
+      "hasCanvas": false,
+      "bodyTextLen": 59,
+      "bodyTextHash": "4fe4afb13b241acbcc5027c0bf81e7661c2be43e42fd3d3126d2a26a7a8e25dc",
+      "bodyTextPrefix": "HIGH-VOLTAGE LABORATORY Prototype C-1 Loading 3D prototype…",
+      "horizontalOverflow": false,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "screenshot": "/workspace/screenshots/app-builder-preview.png"
+    },
+    "mobile": {
+      "width": 390,
+      "height": 844,
+      "status": 200,
+      "title": "C-1 Capacitor Prototype",
+      "hasCanvas": false,
+      "bodyTextLen": 59,
+      "bodyTextHash": "4fe4afb13b241acbcc5027c0bf81e7661c2be43e42fd3d3126d2a26a7a8e25dc",
+      "bodyTextPrefix": "HIGH-VOLTAGE LABORATORY Prototype C-1 Loading 3D prototype…",
+      "horizontalOverflow": false,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "screenshot": "/workspace/screenshots/app-builder-preview-mobile.png"
+    }
+  },
+  "brandWarnings": [],
+  "authWarnings": [],
+  "verdictFile": "/workspace/screenshots/app-builder-preview.json"
+}
