@@ -4,6 +4,7 @@ import { Line, Sparkles } from "@react-three/drei";
 import * as THREE from "three";
 import {
   BALL_Y,
+  CAPACITOR_GAP,
   INNER_R,
   SHELL_INNER,
   V_MAX,
@@ -45,22 +46,21 @@ function FieldLines() {
   const charge = useLab((s) => s.voltage) / V_MAX;
   const lines = useMemo(() => {
     const out: [number, number, number][][] = [];
-    const nPhi = 14;
-    const nTh = 5;
+    const nPhi = 18;
+    const nTh = 7;
     for (let i = 0; i < nPhi; i++) {
       for (let k = 0; k < nTh; k++) {
         const phi = (i / nPhi) * Math.PI * 2;
         const th = 0.35 + (k / (nTh - 1)) * 1.9;
-        const sx = INNER_R * Math.sin(th) * Math.cos(phi);
-        const sy = INNER_R * Math.cos(th);
-        const sz = INNER_R * Math.sin(th) * Math.sin(phi);
-        const ex = SHELL_INNER * Math.sin(th) * Math.cos(phi);
-        const ey = SHELL_INNER * Math.cos(th);
-        const ez = SHELL_INNER * Math.sin(th) * Math.sin(phi);
-        out.push([
-          [sx, sy + BALL_Y, sz],
-          [ex, ey + BALL_Y, ez],
-        ]);
+        const dx = Math.sin(th) * Math.cos(phi);
+        const dy = Math.cos(th);
+        const dz = Math.sin(th) * Math.sin(phi);
+        const radii = [INNER_R, INNER_R + CAPACITOR_GAP * 0.34, INNER_R + CAPACITOR_GAP * 0.68, SHELL_INNER];
+        out.push(radii.map((radius) => [
+          radius * dx,
+          radius * dy + BALL_Y,
+          radius * dz,
+        ]));
       }
     }
     return out;
@@ -77,7 +77,7 @@ function FieldLines() {
           color={COL.accent}
           lineWidth={1.1}
           transparent
-          opacity={0.18 + charge * 0.45}
+          opacity={0.12 + charge * 0.5}
           dashed
           dashSize={0.06}
           gapSize={0.04}

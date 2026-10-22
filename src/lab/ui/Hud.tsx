@@ -10,14 +10,18 @@ import {
 import { Button } from "@/components/ui/button";
 import {
   C,
+  breakdownMargin,
+  electricFieldAtRadius,
   formatCapacitance,
   formatCharge,
+  formatElectricField,
   formatEnergy,
   formatVoltage,
   shockGrade,
   V_MAX,
   chargeOf,
   energyOf,
+  INNER_R,
 } from "@/lab/physics";
 import { useLab } from "@/lab/store";
 import { unlockAudio, playTingle, playShock, setHum } from "@/lab/audio";
@@ -120,6 +124,8 @@ export function Hud() {
   const phase = useLab((s) => s.phase);
   const hoverBall = useLab((s) => s.hoverBall);
   const fill = voltage / V_MAX;
+  const fieldAtBall = electricFieldAtRadius(voltage, INNER_R);
+  const margin = breakdownMargin(voltage);
 
   useEffect(() => {
     if (!entered) return;
@@ -200,7 +206,8 @@ export function Hud() {
             <Stat label="Charge" value={formatCharge(chargeOf(voltage))} />
             <Stat label="Energy" value={formatEnergy(energyOf(voltage))} />
             <Stat label="C" value={formatCapacitance(C)} />
-            <Stat label="V max" value="400 kV" />
+            <Stat label="E at ball" value={formatElectricField(fieldAtBall)} />
+            <Stat label="Air margin" value={voltage > 0 ? `${margin.toFixed(1)}×` : "—"} />
           </div>
           <div className="mt-4 h-1.5 overflow-hidden rounded-full bg-elevated">
             <div
@@ -209,7 +216,9 @@ export function Hud() {
             />
           </div>
           <p className="mt-3 text-xs leading-relaxed text-muted">
-            C = 4πε₀ · a·b / (b − a). Energy stored as ½CV² on the inner ball.
+            C = 4πε₀ · a·b / (b − a). Field strength is highest at the inner
+            conductor; the air margin compares it with an approximate 3 MV/m
+            breakdown field.
           </p>
         </div>
       </aside>

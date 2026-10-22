@@ -16,6 +16,26 @@ The app renders a grounded heavy-sphere capacitor setup in a browser using Three
 
 The simulation logic lives in `src/lab`, while the app shell and router are handled by the TanStack Start structure under `src/routes` and `src/router.tsx`.
 
+## Physics model
+
+The lab uses the SI spherical-capacitor equations with `1 world unit = 1 m`:
+
+- Capacitance: `C = 4πε₀ab / (b − a)`
+- Charge: `Q = CV`
+- Stored energy: `U = ½CV²`
+- Radial dielectric field: `E(r) = Vab / ((b − a)r²)`
+- Potential relative to the outer shell: `φ(r) = V · (b/r − 1) / (b/a − 1)`
+
+The HUD reports charge, energy, capacitance, peak field at the inner conductor, and an approximate air-breakdown margin against 3 MV/m. The field-line layer uses radial multi-segment lines through the dielectric gap. The simulation is educational and visual; the discharge animation is not a medical or electrical-safety model.
+
+## Physics improvements in this update
+
+- Added SI electric-field and potential calculations with clamped, finite inputs.
+- Added peak-field and approximate dry-air breakdown-margin readouts.
+- Made field lines radial and multi-segment across the dielectric gap.
+- Clamped simulation timesteps so a delayed browser frame cannot skip phase transitions.
+- Added physics regression tests for capacitance, charge, energy, potential, field falloff, and breakdown margin.
+
 ## Tech stack
 
 - React 19
@@ -56,6 +76,7 @@ The simulation logic lives in `src/lab`, while the app shell and router are hand
 │   │   ├── world/
 │   │   ├── audio.ts
 │   │   ├── physics.ts
+│   │   ├── physics.test.ts
 │   │   ├── store.ts
 │   │   └── CapacitorLab.tsx
 │   ├── lib/
@@ -117,7 +138,7 @@ npm run preview:restart  # restart the preview server
 npm run preview:stop     # stop the preview server
 npm run typecheck        # type-check the project with TypeScript
 npm run check:auth       # auth invariant checks
-npm run test             # run Node-based tests
+npm run test             # run Node-based and physics regression tests
 npm run lint             # ESLint
 npm run format           # Prettier write
 ```

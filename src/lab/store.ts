@@ -41,6 +41,7 @@ export type LabState = {
 const REACH_S = 0.82;
 const SHOCK_S = 0.78;
 const RECOVER_S = 1.05;
+const MAX_TICK_S = 0.1;
 
 function readReducedMotion() {
   if (typeof window === "undefined") return false;
@@ -91,8 +92,11 @@ export const useLab = create<LabState>((set, get) => ({
     set({ phase: "reaching", phaseElapsed: 0, charging: false });
   },
 
-  tick: (dt) =>
+  tick: (rawDt) =>
     set((s) => {
+      // Rendering can pause for a tab switch or a slow frame. Clamp the
+      // integration step so one delayed frame cannot skip the shock phases.
+      const dt = Math.min(MAX_TICK_S, Math.max(0, Number.isFinite(rawDt) ? rawDt : 0));
       let voltage = s.voltage;
       let trauma = Math.max(0, s.trauma - dt * 1.85);
       let flash = Math.max(0, s.flash - dt * 4.6);
